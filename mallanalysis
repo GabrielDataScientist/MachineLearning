@@ -1,0 +1,27 @@
+import pandas as pd
+import numpy as np
+import plotly as py
+import plotly.graph_objs as go
+from matplotlib import pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
+from pandas_profiling import ProfileReport #Biblioteca que gera relatórios
+
+data_mall = pd.read_csv('Mall_Customers.csv')
+
+plt.style.use('fivethirtyeight')
+plt.figure(1, figsize=[15,6])
+plt.scatter(x = 'Annual Income (k$)', y = 'Spending Score (1-100)', data = data_mall, s = 200, alpha=0.5 )
+
+plt.title('Renda Anual x Pontuação de Gastos')
+plt.xlabel('Annual Income (K$)')
+plt.ylabel('Spending Score (1-100)')
+plt.show()
+
+X2 = data_mall[['Annual Income (k$)', 'Spending Score (1-100)']].iloc[:, :].values
+kmeans = KMeans(n_clusters = 3, init='k-means++', max_iter=300, n_init=10)
+pred_y = kmeans.fit_predict(X2)
+
+plt.scatter(X2[:, 0], X2[:, 1])
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=70, c='red')
+plt.show()
